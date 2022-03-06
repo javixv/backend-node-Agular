@@ -17,14 +17,15 @@ dbConection()
 // console.log(process.env)
 
 //Rutas
-app.get('/',(req, res)=> {
+app.use('/api/usuarios', require('./routes/usuarios'))
+// app.get('/',(req, res)=> {
 
-    res.json({
-        ok : true,
-        msj : 'Hola mundo'
-    })
+//     res.json({
+//         ok : true,
+//         msj : 'Hola mundo'
+//     })
 
-})
+// })
 app.listen(process.env.PORT,()=>{
     console.log('servidor corriendo en el puerto 3000')
 })
