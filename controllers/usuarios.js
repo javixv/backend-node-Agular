@@ -1,4 +1,6 @@
 const { response } = require('express')
+const bcrypt = require('bcryptjs')
+
 const res = require('express/lib/response')
 const Usuario = require('../models/usuarios')
 
@@ -15,25 +17,34 @@ const getUsuarios = async (req, res = response)=> {
 
     const crearUsuarios = async (req, res = response) => {
 
-        const {email,password,nombre} = req.body
+        const { email, password } = req.body;
+        
 
         try{
-        const usaurio = new Usuario(req.body)
+        
 
-        const emailexiste = Usuario.find(email)
-
-        if(emailexiste){
+        const existeEmail = await Usuario.findOne({ email });
+            //console.log(emailexiste)
+        if(existeEmail){
             return res.status(400).json({
                 ok : false,
                 msj : 'Error este email ya esta registrado en la base de datos'
             })
         }
 
-        await usaurio.save()
+        const usuarios = new Usuario(req.body)
+
+
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        usuarios.password = bcrypt.hashSync(password, salt)
+
+        //Guardar usuario
+        await usuarios.save()
 
         res.json({
             ok : true,
-            usaurio
+            usuarios
         })
 
         }catch(error){
@@ -48,9 +59,60 @@ const getUsuarios = async (req, res = response)=> {
     
     }
 
+    const actualizarUsuario = async (req, res = response) => {
+
+        // TODO: Validar token y comprobar si es el usuario correcto
+    
+        const uid = req.params.id;
+    
+    
+        try {
+    
+            const usuarioDB = await Usuario.findById( uid );
+    
+            if ( !usuarioDB ) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No existe un usuario por ese id'
+                });
+            }
+    
+            // Actualizaciones
+            const { password, google, email, ...campos } = req.body;
+    
+            if ( usuarioDB.email !== email ) {
+    
+                const existeEmail = await Usuario.findOne({ email });
+                if ( existeEmail ) {
+                    return res.status(400).json({
+                        ok: false,
+                        msg: 'Ya existe un usuario con ese email'
+                    });
+                }
+            }
+            
+            campos.email = email;
+            const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true } );
+    
+            res.json({
+                ok: true,
+                usuario: usuarioActualizado
+            });
+    
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                ok: false,
+                msg: 'Error inesperado'
+            })
+        }
+    
+    }
 
 
     module.exports = {
         getUsuarios,
-        crearUsuarios
+        crearUsuarios,
+        actualizarUsuario
     }
