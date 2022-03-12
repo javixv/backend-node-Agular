@@ -42,9 +42,11 @@ const getUsuarios = async (req, res = response)=> {
         //Guardar usuario
         await usuarios.save()
 
+        const token = await generarJWT( usuarios.id );
         res.json({
             ok : true,
-            usuarios
+            usuarios,
+            token
         })
 
         }catch(error){
