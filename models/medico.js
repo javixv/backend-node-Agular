@@ -12,11 +12,13 @@ const MedicoSchema = Schema({
     },
     usuario : {
         type : Schema.Types.ObjectId,
-        ref : 'Usuario'
+        ref : 'Usuario',
+        equire : true
     },
     hospital : {
         type : Schema.Types.ObjectId,
-        ref : 'Hospital'
+        ref : 'Hospital',
+        equire : true
     }
     
 }, { collection : 'Medicos'})

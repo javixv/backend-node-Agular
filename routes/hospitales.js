@@ -10,7 +10,12 @@ const router = Router()
 router.get('/', getHospitales)
 
 router.post('/',
-[]
+[
+    validarJWT,
+    check('nombre','El nombre es necesario').not().isEmpty(),
+    validarCampos
+
+]
 , crearHospitales)
 
 router.put( '/:id',
