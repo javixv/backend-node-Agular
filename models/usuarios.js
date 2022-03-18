@@ -36,4 +36,4 @@ UsaurioSchema.method('toJSON', function(){
     return object
 })
 
-module.exports = model('Usaurio', UsaurioSchema)
+module.exports = model('Usuario', UsaurioSchema)

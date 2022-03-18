@@ -9,7 +9,7 @@ const router = Router();
 
 
 router.post('/',[
-        check('email','Email requerido').isEmail(),
+        check('email','Email requerido!!').isEmail(),
         check('password','Password requerido').not().isEmpty(),
         validarCampos
 ],
