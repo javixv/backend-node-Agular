@@ -11,7 +11,7 @@ const login =  async ( req, res = response) => {
 
         //verificar email
         const usuarioDB = await Usuarios.findOne({email})
-        console.log(usuarioDB)
+        //console.log(usuarioDB)
         if(!usuarioDB){
            return res.status(404).json({
                 ok: false,
