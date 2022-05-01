@@ -43,20 +43,64 @@ const crearMedicos = async (req, res = response) => {
 }
 
 
-const actualziarMedicos = (req, res = response) => {
+const actualziarMedicos = async (req, res = response) => {
 
-    res.status(200).json({
-        ok :true,
-        msj : 'actualziarMedicos'
-    })
+    const id = req.params.id
+    try {
+
+        const medicosDb = Medico.findById(id)
+        if(!medicosDb){
+            return res.status(404).json({
+                ok :false,
+                msj : 'Datos no encontrados'
+            })
+        }
+
+        const datosAct = {
+            ...req.body
+        }
+        
+        const updateMedicos = await Medico.findByIdAndUpdate(id, datosAct,{new : true})
+
+        res.status(200).json({
+            ok :true,
+            msj : 'Datos actualizados con existo',
+            datosAct
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok :false,
+            msj : 'Error al actualizar datos de medicos'
+        })
+    }
+    
 }
 
-const borrarMedicos = (req, res = response) => {
+const borrarMedicos = async (req, res = response) => {
 
-    res.status(200).json({
-        ok :true,
-        msj : 'borrarMedicos'
-    })
+    const id = req.params.id
+    try {
+
+        const medicosDb = Medico.findById(id)
+        if(!medicosDb){
+            return res.status(404).json({
+                ok :false,
+                msj : 'Datos no encontrados'
+            })
+        }
+       
+        await Medico.findByIdAndDelete(id)
+
+        res.status(200).json({
+            ok :true,
+            msj : 'Datos eliminados con existo'
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok :false,
+            msj : 'Error al actualizar datos de medicos'
+        })
+    }
 }
 
 
