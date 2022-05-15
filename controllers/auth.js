@@ -50,10 +50,13 @@ const renewtoken = async (req,res = response) => {
     const uid = req.uid
     console.log(uid)
     const token = await generarJWT(uid);
-    console.log(token)
+    //console.log(token)
+    //Obtener el usuario por UID
+    const usuario = await Usuarios.findById(uid)
     res.json({
         ok : true,
-        token
+        token,
+        usuario
     })
 }
 
