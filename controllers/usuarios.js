@@ -13,7 +13,7 @@ const getUsuarios = async (req, res = response)=> {
     //const total = await Usuario.count();
 
     const [usuarios,total] = await Promise.all([
-        Usuario.find().skip(desde).limit(15),
+        Usuario.find().skip(desde).limit(5),
         Usuario.count()
     ])
 
